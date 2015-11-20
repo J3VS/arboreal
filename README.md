@@ -1,14 +1,3 @@
 # circus
 
-A Clojure library designed to ... well, that part is up to you.
-
-## Usage
-
-FIXME
-
-## License
-
-Copyright © 2015 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+A framework for CQRS, Event Sourcing, Materialized Views, Indexing and Data Persistence in Clojure.
