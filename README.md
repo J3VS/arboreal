@@ -9,6 +9,8 @@ was not realizing where Database reads/writes or other side effects were
 occurring. For a functional programming language, Clojurians often litter
 their API handlers with nested function calls with side effects at the bottom.
 This makes the vast majority of the handler impure, and thus untestable.
+Circus lets you build an expressive handler out of pure functions, and takes
+care of side-effects behind the scenes.
 
 Example
 ```
