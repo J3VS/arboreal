@@ -27,19 +27,21 @@ Example
     (grant-permissions group-id group-id :admin)))
 ```
 Instead of dealing with this as a monolithic function, this can be considered
-as a call tree, with side-effects at the nodes. The tree is constructed as
+as a call tree, with side-effects at the nodes. The tree is constructed with
 child nodes depending on the outcome of their parents. Side effects are then
 separated as discrete functions, and a handler is constructed by concatenating
 pure  functions outlining intent to call a side effect, rather than just doing
 it.
 ```
 (defn create-organization!
+  "Does a particular side effect"
   [org]
   {:organization-id (database/persist org)})
 
 ...
 
 (defn create-organization
+  "Pure function that declares intent to do a side effect"
   [{{:keys [name]} :request}]
   (circus/->SideEffect create-organization!
                        [{:name name}]
@@ -48,6 +50,7 @@ it.
 ...
 
 (defn create-organization-handler
+  "Handler constructed of pure functions"
   [request]
   (circus {:request request}
     (then create-organization
