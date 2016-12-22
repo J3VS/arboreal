@@ -33,14 +33,14 @@ separated as discrete functions, and a handler is constructed by concatenating
 pure  functions outlining intent to call a side effect, rather than just doing
 it.
 ```
-(defn create-organization!
+(defsideeffect create-organization!
   "Does a particular side effect"
   [org]
   {:organization-id (database/persist org)})
 
 ...
 
-(defn create-organization
+(defpure create-organization
   "Pure function that declares intent to do a side effect"
   [{{:keys [name]} :request}]
   (circus/->SideEffect create-organization!
