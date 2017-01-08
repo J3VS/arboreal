@@ -9,7 +9,7 @@ was not realizing where Database reads/writes or other side effects were
 occurring. For a functional programming language, Clojurians often litter
 their API handlers with nested function calls with side effects at the bottom.
 This makes the vast majority of the handler impure, and thus untestable.
-Circus lets you build an expressive handler out of pure functions, and takes
+Arboreal lets you build an expressive handler out of pure functions, and takes
 care of side-effects behind the scenes.
 
 Example
@@ -33,30 +33,34 @@ separated as discrete functions, and a handler is constructed by concatenating
 pure  functions outlining intent to call a side effect, rather than just doing
 it.
 ```
-(defsideeffect create-organization!
-  "Does a particular side effect"
+(defsideeffect persist-organization!
+  "Actualy performs the side effect"
   [org]
-  {:organization-id (database/persist org)})
+  (persist org))
 
 ...
 
-(defpure create-organization
-  "Pure function that declares intent to do a side effect"
-  [{{:keys [name]} :request}]
-  (circus/->SideEffect create-organization!
-                       [{:name name}]
-                       :create-org}))
+(defintent build-organization persist-organization!
+  "Does a particular side effect"
+  [org-name]
+  {:org-name org-name
+   :created-by :system
+   :created-at 0})
+
+...
+
+(deftwig create-organization :org build-organization :org-id)
 
 ...
 
 (defn create-organization-handler
   "Handler constructed of pure functions"
   [request]
-  (circus {:request request}
-    (then create-organization
-      (then provision-org)
-      (then create-group
-        (then grant-group-permissions)))))
+  (arborize {:org "Name of the org"}
+    (branch create-organization
+            provision-org)
+    (branch create-group
+            grant-group-permissions)))
 ```
 
 Side effects should be recognized for what they are, and kept distinct from

@@ -1,19 +1,26 @@
-(ns arboreal.handler
-  (:require [arboreal.core :refer [circus then]]]))
+(ns arboreal.example.handler
+  (:require [arboreal.core :as arb :refer [defintent deftwig branch arborize]]
+            [arboreal.example.side-effects :as se]))
 
-(defn create-user
-  [{{{:keys [username]} :params} :request}]
-  {:side-effect side-effects/persist-user!
-   :args [{:username username}]})
+(defintent build-user se/persist-user!
+  [{:keys [username password]}]
+  {:username username
+   :created-by :sytstem
+   :created-at 0})
 
-(defn create-group
-  [{{:keys [user-id]} :create-user}]
-  {:side-effect side-effects/persist-group!
-   :args [{:name "group"
-           :members #{user-id}}]})
+(defintent build-group se/persist-group!
+  [{:keys [group-name]}]
+  {:group-name group-name
+   :created-by :system
+   :created-at 0})
+
+(deftwig create-user :user build-user :user-id)
+(deftwig create-group :group build-group :group-id)
 
 (defn create-user-handler
   []
-  (circus {}
-    (then create-user
-      (then create-group))))
+  (arborize {:user {:username "username"
+                    :password "password"}
+             :group {:group-name "New Group"}}
+    (branch create-user)
+    (branch create-group)))
