@@ -41,7 +41,8 @@ it.
 ...
 
 (defintent build-organization persist-organization!
-  "Does a particular side effect"
+  "Registers intent to do a side effect, returning args to
+  pass to the side-effect function"
   [org-name]
   {:org-name org-name
    :created-by :system
