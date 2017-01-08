@@ -1,4 +1,4 @@
-(ns circus.core
+(ns arboreal.core
   (:require [clojure.spec :as s]))
 
 (defn defn-with-meta
@@ -38,7 +38,7 @@
   (-execute f arg))
 
 (defmacro execute-with-tag
-  [f arg tag]
+  [f tag arg]
   (assoc arg tag (-execute f arg)))
 
 (defn inject-result
@@ -53,6 +53,18 @@
 (defmacro circus
   [troop then]
   (inject-arg troop then))
+
+(defmacro with-tag
+  [f arg tag]
+  `(exeute-with-tag ~f ~arg tag)
+
+(defmacro execute-f
+  [f arg]
+  `(cond
+    (and
+      (list? ~f)
+      (= (var with-tag) ~(first f)))
+        (execute-with-tag ~@(rest f) ~arg)))
 
 ;; Basic `then` macro to thread calls into successive `after` calls
 (defmacro then
@@ -70,17 +82,3 @@
     `(do
       ~@(map #(inject-result f troop %) afters))
     `(execute-with-tag ~f ~troop ~tag)))
-
-;;TODO: consider running tree branches on different threads
-(defmacro then-async
-  [troop & thens]
-  (when thens
-    `(do
-      ~@(map (fn [then]
-               (inject-arg-on-thread troop then)) thens))))
-
-;;TODO: think about how to batch and yet still tag each response
-(defmacro then-batch
-  [troop thens & [after]]
-  (when thens
-    ))

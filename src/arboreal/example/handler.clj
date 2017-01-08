@@ -1,5 +1,5 @@
-(ns circus.handler
-  (:require [circus.core :refer [circus then]]]))
+(ns arboreal.handler
+  (:require [arboreal.core :refer [circus then]]]))
 
 (defn create-user
   [{{{:keys [username]} :params} :request}]

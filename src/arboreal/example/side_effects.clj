@@ -1,4 +1,4 @@
-(ns circus.example.side-effects)
+(ns arboreal.example.side-effects)
 
 (def entity-store (atom {}))
 
