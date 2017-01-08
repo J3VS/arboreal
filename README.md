@@ -1,9 +1,9 @@
-# circus
+# arboreal
 
 This repo is very much a thought experiment, and as such is neither ready
 for use, nor a fully formed concept.
 
-Circus is a way of structuring pure functions without littering your code with
+Arboreal is a way of structuring pure functions without littering your code with
 side effects. When developing API handlers, one problem I repeatedly noticed
 was not realizing where Database reads/writes or other side effects were
 occurring. For a functional programming language, Clojurians often litter
