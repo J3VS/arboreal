@@ -12,7 +12,7 @@ This makes the vast majority of the handler impure, and thus untestable.
 Arboreal lets you build an expressive handler out of pure functions, and takes
 care of side-effects behind the scenes.
 
-Example
+# Example
 ```
 (defn create-organization!
   [{:keys [name] :as request}]
