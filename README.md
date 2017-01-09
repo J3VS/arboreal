@@ -6,9 +6,9 @@ for use, nor a fully formed concept.
 Arboreal is a way of structuring pure functions without littering your code with
 side effects. When developing API handlers, one problem I repeatedly noticed
 was not realizing where Database reads/writes or other side effects were
-occurring. For a functional programming language, Clojurians often litter
-their API handlers with nested function calls with side effects at the bottom.
-This makes the vast majority of the handler impure, and thus untestable.
+occurring. Since Clojure is a functional language, it's nice to not have functions 
+with deeply nested side effects. Doing this makes the vast majority of the 
+function impure, and thus untestable.
 Arboreal lets you build an expressive handler out of pure functions, and takes
 care of side-effects behind the scenes.
 
