@@ -50,18 +50,23 @@ it.
 
 ...
 
-(deftwig create-organization :org build-organization :org-id)
+(deftwig 
+  "Creates a form for the aborization that describes how to extract
+  the necessary data from the bolus, act on it, and reinsert back into
+  the bolus"
+  create-organization :org build-organization :org-id)
 
 ...
 
 (defn create-organization-handler
   "Handler constructed of pure functions"
-  [request]
-  (arborize {:org "Name of the org"}
-    (branch create-organization
-            provision-org)
-    (branch create-group
-            grant-group-permissions)))
+  []
+  (let [bolus {:org "Name of the org"}]
+    (arborize bolus
+      (branch create-organization
+              provision-org)
+      (branch create-group
+              grant-group-permissions))))
 ```
 
 Side effects should be recognized for what they are, and kept distinct from
