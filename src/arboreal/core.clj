@@ -39,10 +39,15 @@
      [bolus#]
      (assoc bolus# ~tag (execute ~function (~extract bolus#)))))
 
-(defmacro branch
-  [bolus & forms]
-  `(-> ~bolus ~@forms))
+ (defmacro branch
+   [bolus & fs]
+   (let [$bolus (gensym "$bolus_")]
+     `(let [~$bolus ~bolus]
+        (future (-> ~$bolus ~@fs))
+        ~$bolus)))
 
  (defmacro arborize
    [bolus & forms]
-   `(branch ~bolus ~@forms))
+   `(do
+     (branch ~bolus ~@forms)
+     nil))
